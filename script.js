@@ -2,13 +2,50 @@ const searchBtn = document.getElementById('search-btn');
 const menulList = document.getElementById('menu');
 const mealIngredientList = document.getElementById('wrapper');
 
+function getSearchInput() {
 
-function getmenulList() {
-    let searchInputTxt = document.getElementById('meal-input').value;
-    console.log(searchInputTxt.length);
+    let seachValue = document.getElementById('meal-input').value;
+    selectURL(seachValue);
+
+}
 
 
-    fetch(` https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchInputTxt}`)
+function selectURL(search) {
+
+    const searchKeyword = search;
+    let selectedURL = "";
+    //check for single alphabet based api url
+    if (searchKeyword.length < 2) {
+        selectedURL = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchKeyword}`
+        getmenulList(selectedURL);
+    }
+
+    //check for category based api url
+    if (searchKeyword === "beef" || searchKeyword === "breakfast" || searchKeyword === "chicken" || searchKeyword === "dessert" || searchKeyword === "goat" || searchKeyword === "lamb" || searchKeyword === "miscellaneous" || searchKeyword === "pasta" || searchKeyword === "pork" || searchKeyword === "seafood" || searchKeyword === "side" || searchKeyword === "starter" || searchKeyword == "vegan" || searchKeyword === "vegetarian" || searchKeyword === "Beef" || searchKeyword === "Breakfast" || searchKeyword === "Chicken" || searchKeyword === "Dessert" || searchKeyword === "Goat" || searchKeyword === "Lamb" || searchKeyword === "Miscellaneous" || searchKeyword === "Pasta" || searchKeyword === "Pork" || searchKeyword === "Seafood" || searchKeyword === "Side" || searchKeyword === "Starter" || searchKeyword == "Vegan" || searchKeyword === "Vegetarian"
+
+    ) {
+        selectedURL = ` https://www.themealdb.com/api/json/v1/1/filter.php?c=${searchKeyword}`;
+        getmenulList(selectedURL);
+    }
+
+    //check for area based api url
+    if (searchKeyword === "american" || searchKeyword === "british" || searchKeyword === "canadian" || searchKeyword === "chinese" || searchKeyword === "dutch" || searchKeyword === "egyptian" || searchKeyword === "french" || searchKeyword === "greek" || searchKeyword === "indian" || searchKeyword === "irish" || searchKeyword === "italian" || searchKeyword === "jamaican" || searchKeyword == "japanese" || searchKeyword === "kenyan" || searchKeyword === "malaysian" || searchKeyword === "mexican" || searchKeyword === "moroccan" || searchKeyword === "polish" || searchKeyword === "russian" || searchKeyword === "spanish" || searchKeyword === "thai" || searchKeyword === "tunisian" || searchKeyword === "turkish" || searchKeyword === "unknown" || searchKeyword === "vietnamese" || searchKeyword === "American" || searchKeyword === "British" || searchKeyword === "Canadian" || searchKeyword === "Chinese" || searchKeyword === "Dutch" || searchKeyword === "Egyptian" || searchKeyword === "French" || searchKeyword === "Greek" || searchKeyword === "Indian" || searchKeyword === "Irish" || searchKeyword === "Italian" || searchKeyword === "Jamaican" || searchKeyword == "Japanese" || searchKeyword === "Kenyan" || searchKeyword === "Malaysian" || searchKeyword === "Mexican" || searchKeyword === "Moroccan" || searchKeyword === "Polish" || searchKeyword === "Russian" || searchKeyword === "Spanish" || searchKeyword === "Thai" || searchKeyword === "Tunisian" || searchKeyword === "Turkish" || searchKeyword === "Unknown" || searchKeyword === "Vietnamese") {
+        selectedURL = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${searchKeyword}`;
+        getmenulList(selectedURL);
+    }
+    //check for name based api url 
+    else {
+
+        selectedURL = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchKeyword}`;
+        getmenulList(selectedURL);
+    }
+
+
+}
+
+function getmenulList(URL) {
+
+    fetch(URL)
         .then(res => res.json())
         .then(data => {
 
@@ -44,7 +81,6 @@ function getmenulList() {
 function getIngredients(name) {
 
     const mealDetail = `https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`
-    console.log(mealDetail);
     fetch(mealDetail)
         .then(res => res.json())
         .then(data => {
@@ -92,8 +128,6 @@ function getIngredients(name) {
 
 
 //search button event listener
-
 searchBtn.addEventListener('click', function () {
-
-    getmenulList();
+    getSearchInput();
 });
