@@ -54,7 +54,7 @@ function getmenulList(URL) {
             if (data.meals) {
                 data.meals.forEach(meal => {
 
-                markup += ` 
+                    markup += ` 
                  <div onclick="getIngredients('${meal.strMeal}')" class="card" style="width: 18rem;">
                  <img class="card-img-top" src="${meal.strMealThumb}" alt="Card image cap">
                  <div class="card-body">
@@ -90,6 +90,8 @@ function getIngredients(name) {
             if (data.meals) {
                 data.meals.forEach(meal => {
 
+                    findIngredients(name);
+
                     markup = `
                         <div class="mealImage rounded">
                         <img style="width: 60%; border-radius: 5px;" src="${meal.strMealThumb}" alt="">
@@ -97,18 +99,9 @@ function getIngredients(name) {
                         <div class="mealDetails">
                         <div class="titles mt-2 py-2"><h3>${meal.strMeal}</h3></div>
                         <div id="ingredientsList">
-                        <h5>Ingredients :</h5>
+                        <h5>Ingredients</h5>
                         <ul id="ingredients">
-                            <li>${meal.strIngredient1}</li>
-                            <li>${meal.strIngredient2}</li>
-                            <li>${meal.strIngredient3}</li>
-                            <li>${meal.strIngredient4}</li>
-                            <li>${meal.strIngredient5}</li>
-                            <li>${meal.strIngredient6}</li>
-                            <li>${meal.strIngredient7}</li>
-                            <li>${meal.strIngredient8}</li>
-                            <li>${meal.strIngredient9}</li>
-                            <li>${meal.strIngredient10}</li> 
+                           
                         </ul>
                         </div>
                         </div>
@@ -131,3 +124,61 @@ function getIngredients(name) {
 searchBtn.addEventListener('click', function () {
     getSearchInput();
 });
+
+//total ingredients finding skipping null & empty strings
+
+function findIngredients(name) {
+
+    const mealDetail = `https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`
+
+    fetch(mealDetail)
+        .then(response => response.json())
+        .then(data => {
+
+            var totalIngredients = [];
+            let keys = [];
+            let flag = 0;
+            const apK = Object.keys(data.meals[0]);
+            const substring = "strIngredient";
+
+            for (let i = 0; i < 51; i++) {
+                keys[i] = apK[i];
+                if ((keys[i].includes(substring))) {
+                    totalIngredients.push(keys[i]);
+                    flag++;
+                }
+
+            }
+
+            let ingredients = [];
+            for (let j = 0; j < totalIngredients.length; j++) {
+                const element = totalIngredients[j];
+                const values = data.meals[0][element];
+                if (data.meals[0][element] === null) {
+                    console.log('inside null conditions');
+
+                } else if (data.meals[0][element] === "") {
+                    console.log('inside empty string condition');
+                } else {
+                    ingredients.push(data.meals[0][element]);
+                }
+
+            }
+
+            //creating dynamic list
+
+            for (let i = 0; i < ingredients.length; i++) {
+                const ul = document.getElementById('ingredients');
+                const ingredient = ingredients[i];
+                const li = document.createElement('li');
+                li.innerText = ingredient;
+                ul.appendChild(li);
+            }
+
+
+        });
+
+}
+
+
+
