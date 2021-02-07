@@ -110,6 +110,7 @@ function getIngredients(name) {
                             <li>${meal.strIngredient9}</li>
                             <li>${meal.strIngredient10}</li> 
                         </ul>
+                        <br></br>
                         </div>
                         </div>
                         ` ;
