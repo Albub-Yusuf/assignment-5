@@ -9,7 +9,7 @@ function getSearchInput() {
 
 }
 
-
+//select API URL based on search keyword
 function selectURL(search) {
 
     const searchKeyword = search;
@@ -43,6 +43,7 @@ function selectURL(search) {
 
 }
 
+//function for fetching meal list
 function getmenulList(URL) {
 
     fetch(URL)
@@ -54,7 +55,7 @@ function getmenulList(URL) {
             if (data.meals) {
                 data.meals.forEach(meal => {
 
-                    markup += ` 
+                markup += ` 
                  <div onclick="getIngredients('${meal.strMeal}')" class="card" style="width: 18rem;">
                  <img class="card-img-top" src="${meal.strMealThumb}" alt="Card image cap">
                  <div class="card-body">
@@ -94,7 +95,7 @@ function getIngredients(name) {
 
                     markup = `
                         <div class="mealImage rounded">
-                        <img style="width: 60%; border-radius: 5px;" src="${meal.strMealThumb}" alt="">
+                        <img style="width: 100%; border-radius: 5px;" src="${meal.strMealThumb}" alt="">
                         </div>
                         <div class="mealDetails">
                         <div class="titles mt-2 py-2"><h3>${meal.strMeal}</h3></div>
@@ -118,14 +119,7 @@ function getIngredients(name) {
         });
 }
 
-
-
-//search button event listener
-searchBtn.addEventListener('click', function () {
-    getSearchInput();
-});
-
-//total ingredients finding skipping null & empty strings
+//function for finding total ingredients of single meal except null & empty strings
 
 function findIngredients(name) {
 
@@ -137,7 +131,6 @@ function findIngredients(name) {
 
             var totalIngredients = [];
             let keys = [];
-            let flag = 0;
             const apK = Object.keys(data.meals[0]);
             const substring = "strIngredient";
 
@@ -145,9 +138,7 @@ function findIngredients(name) {
                 keys[i] = apK[i];
                 if ((keys[i].includes(substring))) {
                     totalIngredients.push(keys[i]);
-                    flag++;
                 }
-
             }
 
             let ingredients = [];
@@ -179,6 +170,11 @@ function findIngredients(name) {
         });
 
 }
+
+//search button event listener
+searchBtn.addEventListener('click', function () {
+    getSearchInput();
+});
 
 
 
